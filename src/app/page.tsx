@@ -4,6 +4,7 @@ import Hero from "./components/main/Hero";
 import Features from "./components/main/Feature";
 import Footer from "./components/Footer";
 import TrendingStocks from "./components/main/TrendingStocks";
+import UnlistedSharesPage from "./unlisted-shares/page";
 
 export default function Home() {
   return (
@@ -12,7 +13,9 @@ export default function Home() {
     <Hero/>
     <TrendingStocks/>
     <Features/>
+    <UnlistedSharesPage/>
     <Footer/>
+   
     </>
   );
 }
