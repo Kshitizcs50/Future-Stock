@@ -1,23 +1,35 @@
 "use client";
-
+import React from "react";
 import Link from "next/link";
 
 export default function Header() {
   return (
-    <header className="bg-blue-600 text-white shadow-md">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-        {/* ✅ Logo */}
-        <h1 className="text-2xl font-bold">
-          <Link href="/">Future Stock</Link>
-        </h1>
+    <header className="flex justify-between items-center px-10 py-4 shadow bg-white sticky top-0 z-50">
+      {/* Logo */}
+      <div className="flex items-center gap-2">
+        <span className="text-green-600 font-bold text-2xl">UV</span>
+        <span className="font-semibold text-lg">Unlisted Valley</span>
+      </div>
 
-        {/* ✅ Navigation */}
-        <nav className="space-x-6">
-          <Link href="/" className="hover:underline">Home</Link>
-          <Link href="/about" className="hover:underline">About</Link>
-          <Link href="/contact" className="hover:underline">Contact</Link>
-          <Link href="/blog" className="hover:underline">Blog</Link>
-        </nav>
+      {/* Navbar */}
+      <nav className="flex gap-6 text-gray-700 font-medium">
+        <Link href="/">Home</Link>
+        <Link href="/shares">Unlisted Shares</Link>
+        <Link href="/news">News</Link>
+        <Link href="/blogs">Blogs</Link>
+        <Link href="/partner">Partner with Us</Link>
+      </nav>
+
+      {/* Search + Button */}
+      <div className="flex items-center gap-3">
+        <input
+          type="text"
+          placeholder="Search stocks..."
+          className="border rounded-full px-4 py-1"
+        />
+        <button className="bg-black text-white px-4 py-2 rounded-full">
+          Contact Us
+        </button>
       </div>
     </header>
   );
