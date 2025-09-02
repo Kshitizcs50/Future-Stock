@@ -5,6 +5,7 @@ import Features from "./components/main/Feature";
 import Footer from "./components/Footer";
 import TrendingStocks from "./components/main/TrendingStocks";
 import UnlistedSharesPage from "./unlisted-shares/page";
+import N
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
     <TrendingStocks/>
     <Features/>
     <UnlistedSharesPage/>
+    <NewsArt/>
     <Footer/>
    
     </>
