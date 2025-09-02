@@ -5,7 +5,10 @@ import Features from "./components/main/Feature";
 import Footer from "./components/Footer";
 import TrendingStocks from "./components/main/TrendingStocks";
 import UnlistedSharesPage from "./unlisted-shares/page";
-import N
+import NewsArticles from "./components/main/NewsArticle";
+import HowItWorks from "./components/main/HowitsWork";
+import TestimonialSection from "./components/main/TestimonialSection";
+
 
 export default function Home() {
   return (
@@ -15,7 +18,9 @@ export default function Home() {
     <TrendingStocks/>
     <Features/>
     <UnlistedSharesPage/>
-    <NewsArt/>
+    <NewsArticles/>
+    <HowItWorks/>
+    <TestimonialSection/>
     <Footer/>
    
     </>

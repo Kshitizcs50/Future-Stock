@@ -1,88 +1,91 @@
 "use client";
-import dynamic from "next/dynamic";
+import React from "react";
 
+const shares = [
+  {
+    name: "CIAL",
+    price: "₹470.00",
+    change: "+2.83%",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBBeY6cn7tZ2C6dvO8E5YcoBcxNwFpVDu0TQ&s",
+    changePositive: true,
+  },
+  {
+    name: "Orbis Financial Corporation",
+    price: "₹520.00",
+    change: "+12.90%",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSQSeBavrkAa5G6Eby6TRLljIiM7qsxVrkWw&s",
+    changePositive: true,
+  },
+  {
+    name: "Goodluck Defence & Aerospace",
+    price: "₹315.00",
+    change: "+14.29%",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgdY9CnerWnYfmOqgDcRPqLX42PVnXfiHDJg&s",
+    changePositive: true,
+  },
+  {
+    name: "Incred Holdings",
+    price: "₹163.00",
+    change: "-6.96%",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyDXRiWPrTr9M1t8iYtwjRj-TpA8pQ3tXzsg&s",
+    changePositive: false,
+  },
+];
 
-export default function TrendingStocks() {
-    const ResponsiveContainer = dynamic(
-  () => import("recharts").then((mod) => mod.ResponsiveContainer),
-  { ssr: false }
-);
-const LineChart = dynamic(
-  () => import("recharts").then((mod) => mod.LineChart),
-  { ssr: false }
-);
-const Line = dynamic(
-  () => import("recharts").then((mod) => mod.Line),
-  { ssr: false }
-);
-  const stocks = [
-    {
-      name: "Apple (AAPL)",
-      price: "$189.55",
-      data: [150, 160, 155, 170, 180, 189],
-      change: "+2.1%",
-    },
-    {
-      name: "Tesla (TSLA)",
-      price: "$248.12",
-      data: [220, 230, 240, 250, 260, 248],
-      change: "-1.5%",
-    },
-    {
-      name: "Amazon (AMZN)",
-      price: "$142.77",
-      data: [130, 135, 140, 145, 150, 142],
-      change: "+0.9%",
-    },
-    {
-      name: "Microsoft (MSFT)",
-      price: "$327.45",
-      data: [310, 315, 320, 330, 335, 327],
-      change: "-0.3%",
-    },
-  ];
-
+export default function TrendingShares() {
   return (
-    <section className="bg-white py-16 px-6 lg:px-20">
-      <div className="max-w-7xl mx-auto text-center">
-        <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-          📈 Trending Stocks
-        </h2>
-        <p className="mt-4 text-lg text-gray-600">
-          Stay updated with the latest market movers.
-        </p>
-      </div>
+    <section className="px-6 py-12 bg-gray-50">
+      <h2 className="text-3xl md:text-4xl font-extrabold text-center text-gray-900">
+        Trending Unlisted Shares
+      </h2>
+      <p className="text-center text-gray-500 mt-2 mb-10">
+        Discover rising opportunities in the market.
+      </p>
 
-      <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-        {stocks.map((stock, idx) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {shares.map((share, index) => (
           <div
-            key={idx}
-            className="rounded-2xl bg-gray-50 p-6 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col items-center"
+            key={index}
+            className="bg-gradient-to-br from-white to-gray-100 rounded-2xl shadow-lg p-6 hover:scale-105 hover:shadow-2xl transition-all duration-300"
           >
-            <h3 className="text-lg font-semibold text-gray-900">
-              {stock.name}
-            </h3>
-            <p className="text-gray-600">{stock.price}</p>
-            <p
-              className={`mt-1 text-sm font-medium ${
-                stock.change.startsWith("+") ? "text-green-600" : "text-red-600"
-              }`}
-            >
-              {stock.change}
-            </p>
+            {/* Logo + Name */}
+            <div className="flex items-center gap-4 pb-4 border-b border-gray-200">
+              <img
+                src={share.logo}
+                alt={share.name}
+                width={50}
+                height={50}
+                className="rounded-full object-contain ring-2 ring-gray-200"
+              />
+              <h3 className="text-lg font-semibold text-gray-900">
+                {share.name}
+              </h3>
+            </div>
 
-            <div className="w-full h-24 mt-4">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={stock.data.map((val, i) => ({ index: i, val }))}>
-                  <Line
-                    type="monotone"
-                    dataKey="val"
-                    stroke={stock.change.startsWith("+") ? "#16a34a" : "#dc2626"}
-                    strokeWidth={2}
-                    dot={false}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+            {/* Price + Change */}
+            <div className="mt-4">
+              <p className="text-3xl font-extrabold text-gray-900 tracking-tight">
+                {share.price}
+              </p>
+              <p
+                className={`text-sm font-semibold mt-1 ${
+                  share.changePositive ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {share.change}
+              </p>
+            </div>
+
+            {/* Smooth line chart */}
+            <div className="mt-5">
+              <svg height="45" width="100%">
+                <path
+                  d="M0,30 Q50,10 100,20 T200,15"
+                  stroke={share.changePositive ? "green" : "red"}
+                  strokeWidth="2.5"
+                  fill="none"
+                />
+              </svg>
             </div>
           </div>
         ))}
