@@ -13,7 +13,7 @@ import TestimonialSection from "./components/main/TestimonialSection";
 export default function Home() {
   return (
     <>
-    <Header/>
+    
     <Hero/>
     <TrendingStocks/>
     <Features/>
@@ -21,7 +21,7 @@ export default function Home() {
     <NewsArticles/>
     <HowItWorks/>
     <TestimonialSection/>
-    <Footer/>
+    
    
     </>
   );
