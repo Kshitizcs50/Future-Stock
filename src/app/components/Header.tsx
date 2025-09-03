@@ -166,7 +166,7 @@ export default function Header() {
             <nav className="hidden md:flex gap-8 items-center text-slate-700 font-medium">
               <Link href="/" className="hover:text-sky-600 transition">Home</Link>
               <Link href="/UnlistedSharesTable" className="hover:text-sky-600 transition">Unlisted Shares</Link>
-              <Link href="/news" className="hover:text-sky-600 transition">News</Link>
+              <Link href="/Newslatest" className="hover:text-sky-600 transition">News</Link>
               <Link href="/blogs" className="hover:text-sky-600 transition">Blogs</Link>
             </nav>
 
@@ -292,7 +292,7 @@ export default function Header() {
               <nav className="flex flex-col gap-3">
                 <Link href="/" onClick={() => setDrawerOpen(false)} className="py-2">Home</Link>
                 <Link href="/UnlistedSharesTable" onClick={() => setDrawerOpen(false)} className="py-2">Unlisted Shares</Link>
-                <Link href="/news" onClick={() => setDrawerOpen(false)} className="py-2">News</Link>
+                <Link href="/Newslatest" onClick={() => setDrawerOpen(false)} className="py-2">News</Link>
                 <Link href="/blogs" onClick={() => setDrawerOpen(false)} className="py-2">Blogs</Link>
                 <Link href="/partner" onClick={() => setDrawerOpen(false)} className="py-2">Partner</Link>
               </nav>
