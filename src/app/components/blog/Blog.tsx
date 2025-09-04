@@ -8,8 +8,7 @@ export default function Blog() {
       id: 1,
       title: "What Are Unlisted Shares? A Beginner’s Guide",
       category: "Guide",
-      description:
-        "Your complete introduction to the world of unlisted equities.",
+      description: "Your complete introduction to the world of unlisted equities.",
       image: "/images/blog1.jpg",
     },
   ]);
@@ -36,43 +35,49 @@ export default function Blog() {
   };
 
   return (
-    <section className="py-16 px-6 bg-gray-50">
+    <section className="py-20 px-6 bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-14">
-          <h2 className="text-4xl font-bold text-gray-900">Our Blog</h2>
-          <p className="text-gray-600 mt-2 text-lg">
+        <motion.div
+          initial={{ opacity: 0, y: -40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-5xl font-extrabold bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+            ✨ Our Blog
+          </h2>
+          <p className="text-gray-300 mt-3 text-lg">
             Insights, thoughts, and perspectives on topics that matter.
           </p>
-        </div>
+        </motion.div>
 
         {/* Blog Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-16">
           {blogs.map((blog, index) => (
             <motion.div
               key={blog.id}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.2 }}
-              className="bg-white rounded-2xl shadow-md hover:shadow-2xl transition overflow-hidden"
+              transition={{ delay: index * 0.2, duration: 0.7 }}
+              whileHover={{ scale: 1.05, rotate: -1 }}
+              className="relative rounded-3xl overflow-hidden shadow-xl bg-white/10 backdrop-blur-xl border border-white/20 hover:border-purple-400 transition"
             >
-              <div className="overflow-hidden">
-                <img
-                  src={blog.image}
-                  alt={blog.title}
-                  className="w-full h-52 object-cover transform transition-transform duration-500 hover:scale-110"
-                />
-              </div>
-              <div className="p-5 flex flex-col">
-                <span className="px-3 py-1 text-xs font-semibold bg-blue-100 text-blue-700 rounded-full mb-3">
+              <motion.img
+                src={blog.image}
+                alt={blog.title}
+                className="w-full h-56 object-cover"
+                whileHover={{ scale: 1.1 }}
+                transition={{ duration: 0.6 }}
+              />
+              <div className="p-6">
+                <span className="px-4 py-1 text-xs font-semibold bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full mb-4 inline-block">
                   {blog.category || "General"}
                 </span>
-                <h3 className="text-xl font-semibold text-gray-800 mb-2 hover:text-blue-600 transition">
+                <h3 className="text-2xl font-bold mb-3 hover:text-purple-400 transition">
                   {blog.title}
                 </h3>
-                <p className="text-gray-600 text-sm line-clamp-3">
-                  {blog.description}
-                </p>
+                <p className="text-gray-300 text-sm">{blog.description}</p>
               </div>
             </motion.div>
           ))}
@@ -80,58 +85,56 @@ export default function Blog() {
 
         {/* Add Blog Form */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.8 }}
           whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="bg-white p-8 rounded-2xl shadow-lg max-w-2xl mx-auto"
+          transition={{ duration: 0.6 }}
+          className="bg-white/10 backdrop-blur-xl border border-white/20 p-10 rounded-3xl shadow-2xl max-w-3xl mx-auto"
         >
-          <h3 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
+          <h3 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
             ✍️ Write Your Own Blog
           </h3>
 
-          <div className="grid gap-4">
-            <input
+          <div className="grid gap-5">
+            <motion.input
+              whileFocus={{ scale: 1.03 }}
               type="text"
               placeholder="Blog Title"
               value={newBlog.title}
-              onChange={(e) =>
-                setNewBlog({ ...newBlog, title: e.target.value })
-              }
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              onChange={(e) => setNewBlog({ ...newBlog, title: e.target.value })}
+              className="w-full p-4 rounded-xl bg-gray-800 text-white border border-gray-700 focus:ring-2 focus:ring-purple-500 outline-none"
             />
-            <input
+            <motion.input
+              whileFocus={{ scale: 1.03 }}
               type="text"
               placeholder="Category"
               value={newBlog.category}
-              onChange={(e) =>
-                setNewBlog({ ...newBlog, category: e.target.value })
-              }
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              onChange={(e) => setNewBlog({ ...newBlog, category: e.target.value })}
+              className="w-full p-4 rounded-xl bg-gray-800 text-white border border-gray-700 focus:ring-2 focus:ring-purple-500 outline-none"
             />
-            <textarea
+            <motion.textarea
+              whileFocus={{ scale: 1.03 }}
               placeholder="Blog Description"
               value={newBlog.description}
-              onChange={(e) =>
-                setNewBlog({ ...newBlog, description: e.target.value })
-              }
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              onChange={(e) => setNewBlog({ ...newBlog, description: e.target.value })}
+              className="w-full p-4 rounded-xl bg-gray-800 text-white border border-gray-700 focus:ring-2 focus:ring-purple-500 outline-none"
               rows={4}
-            ></textarea>
-            <input
+            />
+            <motion.input
+              whileFocus={{ scale: 1.03 }}
               type="text"
               placeholder="Image URL (optional)"
               value={newBlog.image}
-              onChange={(e) =>
-                setNewBlog({ ...newBlog, image: e.target.value })
-              }
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              onChange={(e) => setNewBlog({ ...newBlog, image: e.target.value })}
+              className="w-full p-4 rounded-xl bg-gray-800 text-white border border-gray-700 focus:ring-2 focus:ring-purple-500 outline-none"
             />
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05, boxShadow: "0px 0px 20px #9333ea" }}
+              whileTap={{ scale: 0.95 }}
               onClick={handleAddBlog}
-              className="bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition"
+              className="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 rounded-xl font-semibold tracking-wide"
             >
               🚀 Publish Blog
-            </button>
+            </motion.button>
           </div>
         </motion.div>
       </div>
