@@ -167,7 +167,7 @@ export default function Header() {
               <Link href="/" className="hover:text-sky-600 transition">Home</Link>
               <Link href="/UnlistedSharesTable" className="hover:text-sky-600 transition">Unlisted Shares</Link>
               <Link href="/Newslatest" className="hover:text-sky-600 transition">News</Link>
-              <Link href="/blogs" className="hover:text-sky-600 transition">Blogs</Link>
+              <Link href="/Bloog" className="hover:text-sky-600 transition">Blogs</Link>
             </nav>
 
             {/* right: search + contact */}
@@ -245,13 +245,15 @@ export default function Header() {
               </button>
 
               {/* Contact button */}
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                className="hidden md:flex items-center gap-2 bg-gradient-to-r from-sky-600 to-cyan-500 text-white px-4 py-2 rounded-full shadow"
-              >
-                <Phone size={16} />
-                <span className="text-sm">Contact</span>
-              </motion.button>
+              <Link href="/contact">
+  <motion.button
+    whileHover={{ scale: 1.03 }}
+    className="hidden md:flex items-center gap-2 bg-gradient-to-r from-sky-600 to-cyan-500 text-white px-4 py-2 rounded-full shadow"
+  >
+    <Phone size={16} />
+    <span className="text-sm">Contact</span>
+  </motion.button>
+</Link>
 
               {/* mobile drawer button */}
               <button className="md:hidden" onClick={() => setDrawerOpen((d) => !d)} aria-label="Open menu">
@@ -293,7 +295,7 @@ export default function Header() {
                 <Link href="/" onClick={() => setDrawerOpen(false)} className="py-2">Home</Link>
                 <Link href="/UnlistedSharesTable" onClick={() => setDrawerOpen(false)} className="py-2">Unlisted Shares</Link>
                 <Link href="/Newslatest" onClick={() => setDrawerOpen(false)} className="py-2">News</Link>
-                <Link href="/blogs" onClick={() => setDrawerOpen(false)} className="py-2">Blogs</Link>
+                <Link href="/Bloog" onClick={() => setDrawerOpen(false)} className="py-2">Blogs</Link>
                 <Link href="/partner" onClick={() => setDrawerOpen(false)} className="py-2">Partner</Link>
               </nav>
             </motion.aside>
