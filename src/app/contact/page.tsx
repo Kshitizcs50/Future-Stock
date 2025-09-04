@@ -1,57 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  Phone,
-  Mail,
-  MapPin,
-  Send,
-  TrendingUp,
-  TrendingDown,
-} from "lucide-react";
-
-const stocks = [
-  { name: "AAPL", price: 189.34, change: +1.2 },
-  { name: "TSLA", price: 262.78, change: -0.8 },
-  { name: "AMZN", price: 134.11, change: +0.5 },
-  { name: "GOOG", price: 141.92, change: +2.1 },
-  { name: "MSFT", price: 327.15, change: -1.4 },
-];
+import { Phone, Mail, MapPin, Send } from "lucide-react";
 
 export default function ContactPage() {
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-50 to-white flex flex-col items-center justify-center overflow-hidden">
-      {/* 🔥 Stock ticker */}
-      <div className="w-full bg-slate-900 text-white py-3 overflow-hidden">
-        <motion.div
-          animate={{ x: ["100%", "-100%"] }}
-          transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
-          className="flex gap-12 whitespace-nowrap text-sm px-6"
-        >
-          {stocks.map((s, idx) => (
-            <div
-              key={idx}
-              className="flex items-center gap-2 font-semibold tracking-wide"
-            >
-              <span>{s.name}</span>
-              <span>${s.price.toFixed(2)}</span>
-              <span
-                className={`flex items-center gap-1 ${
-                  s.change >= 0 ? "text-green-400" : "text-red-400"
-                }`}
-              >
-                {s.change >= 0 ? (
-                  <TrendingUp size={14} />
-                ) : (
-                  <TrendingDown size={14} />
-                )}
-                {s.change}%
-              </span>
-            </div>
-          ))}
-        </motion.div>
-      </div>
-
       {/* 🔥 Animated trading bars in background */}
       <div className="absolute inset-0 flex justify-center gap-2 opacity-10 pointer-events-none">
         {Array.from({ length: 20 }).map((_, i) => (
