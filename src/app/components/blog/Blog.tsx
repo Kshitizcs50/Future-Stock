@@ -1,37 +1,55 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-export default function Blog() {
-  const [blogs, setBlogs] = useState([
-    {
-      id: 1,
-      title: "What Are Unlisted Shares? A Beginner’s Guide",
-      category: "Guide",
-      description: "Your complete introduction to the world of unlisted equities.",
-      image: "/images/blog1.jpg",
-    },
-  ]);
+interface BlogType {
+  _id?: string;
+  title: string;
+  category: string;
+  description: string;
+  image: string;
+}
 
-  const [newBlog, setNewBlog] = useState({
+export default function Blog() {
+  const [blogs, setBlogs] = useState<BlogType[]>([]);
+  const [newBlog, setNewBlog] = useState<BlogType>({
     title: "",
     category: "",
     description: "",
     image: "",
   });
 
-  // Add Blog Handler
-  const handleAddBlog = () => {
+  // Fetch blogs from backend
+  const fetchBlogs = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/blogs");
+      const data = await res.json();
+      setBlogs(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
+  // Add new blog to backend
+  const handleAddBlog = async () => {
     if (!newBlog.title || !newBlog.description) return;
-    setBlogs([
-      ...blogs,
-      {
-        id: blogs.length + 1,
-        ...newBlog,
-        image: newBlog.image || "/images/default.jpg",
-      },
-    ]);
-    setNewBlog({ title: "", category: "", description: "", image: "" });
+
+    try {
+      const res = await fetch("http://localhost:5000/api/blogs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newBlog),
+      });
+      const data = await res.json();
+      setBlogs([data, ...blogs]); // Show new blog on top
+      setNewBlog({ title: "", category: "", description: "", image: "" });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -53,35 +71,45 @@ export default function Blog() {
         </motion.div>
 
         {/* Blog Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-16">
-          {blogs.map((blog, index) => (
-            <motion.div
-              key={blog.id}
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.2, duration: 0.7 }}
-              whileHover={{ scale: 1.05, rotate: -1 }}
-              className="relative rounded-3xl overflow-hidden shadow-xl bg-white/10 backdrop-blur-xl border border-white/20 hover:border-purple-400 transition"
-            >
-              <motion.img
-                src={blog.image}
-                alt={blog.title}
-                className="w-full h-56 object-cover"
-                whileHover={{ scale: 1.1 }}
-                transition={{ duration: 0.6 }}
-              />
-              <div className="p-6">
-                <span className="px-4 py-1 text-xs font-semibold bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full mb-4 inline-block">
-                  {blog.category || "General"}
-                </span>
-                <h3 className="text-2xl font-bold mb-3 hover:text-purple-400 transition">
-                  {blog.title}
-                </h3>
-                <p className="text-gray-300 text-sm">{blog.description}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+        {blogs.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-16">
+            {blogs.map((blog, index) => (
+              <motion.div
+                key={blog._id || index}
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.2, duration: 0.7 }}
+                whileHover={{ scale: 1.05, rotate: -1 }}
+                className="relative rounded-3xl overflow-hidden shadow-xl bg-white/10 backdrop-blur-xl border border-white/20 hover:border-purple-400 transition"
+              >
+                {blog.image && (
+                  <motion.img
+                    src={blog.image}
+                    alt={blog.title}
+                    className="w-full h-56 object-cover"
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.6 }}
+                  />
+                )}
+                <div className="p-6">
+                  {blog.category && (
+                    <span className="px-4 py-1 text-xs font-semibold bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full mb-4 inline-block">
+                      {blog.category}
+                    </span>
+                  )}
+                  <h3 className="text-2xl font-bold mb-3 hover:text-purple-400 transition">
+                    {blog.title}
+                  </h3>
+                  <p className="text-gray-300 text-sm">{blog.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center text-gray-400 text-lg mb-16">
+            😎 No blogs yet. Be the first to post!
+          </div>
+        )}
 
         {/* Add Blog Form */}
         <motion.div
@@ -93,14 +121,15 @@ export default function Blog() {
           <h3 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
             ✍️ Write Your Own Blog
           </h3>
-
           <div className="grid gap-5">
             <motion.input
               whileFocus={{ scale: 1.03 }}
               type="text"
               placeholder="Blog Title"
               value={newBlog.title}
-              onChange={(e) => setNewBlog({ ...newBlog, title: e.target.value })}
+              onChange={(e) =>
+                setNewBlog({ ...newBlog, title: e.target.value })
+              }
               className="w-full p-4 rounded-xl bg-gray-800 text-white border border-gray-700 focus:ring-2 focus:ring-purple-500 outline-none"
             />
             <motion.input
@@ -108,14 +137,18 @@ export default function Blog() {
               type="text"
               placeholder="Category"
               value={newBlog.category}
-              onChange={(e) => setNewBlog({ ...newBlog, category: e.target.value })}
+              onChange={(e) =>
+                setNewBlog({ ...newBlog, category: e.target.value })
+              }
               className="w-full p-4 rounded-xl bg-gray-800 text-white border border-gray-700 focus:ring-2 focus:ring-purple-500 outline-none"
             />
             <motion.textarea
               whileFocus={{ scale: 1.03 }}
               placeholder="Blog Description"
               value={newBlog.description}
-              onChange={(e) => setNewBlog({ ...newBlog, description: e.target.value })}
+              onChange={(e) =>
+                setNewBlog({ ...newBlog, description: e.target.value })
+              }
               className="w-full p-4 rounded-xl bg-gray-800 text-white border border-gray-700 focus:ring-2 focus:ring-purple-500 outline-none"
               rows={4}
             />
@@ -124,7 +157,9 @@ export default function Blog() {
               type="text"
               placeholder="Image URL (optional)"
               value={newBlog.image}
-              onChange={(e) => setNewBlog({ ...newBlog, image: e.target.value })}
+              onChange={(e) =>
+                setNewBlog({ ...newBlog, image: e.target.value })
+              }
               className="w-full p-4 rounded-xl bg-gray-800 text-white border border-gray-700 focus:ring-2 focus:ring-purple-500 outline-none"
             />
             <motion.button
