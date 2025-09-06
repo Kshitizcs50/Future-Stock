@@ -1,9 +1,8 @@
-import express from "express";
-import Stock from "../models/Stock.js";
+const express = require("express");
+const Stock = require("../models/Stock");
 
 const router = express.Router();
 
-// Get all stocks
 router.get("/", async (req, res) => {
   try {
     const stocks = await Stock.find();
@@ -13,7 +12,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Add stock
 router.post("/", async (req, res) => {
   try {
     const stock = new Stock(req.body);
@@ -24,4 +22,4 @@ router.post("/", async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;
