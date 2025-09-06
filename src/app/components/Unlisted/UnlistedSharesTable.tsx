@@ -61,6 +61,43 @@ export default function UnlistedSharesTable() {
     startIndex + ITEMS_PER_PAGE
   );
 
+  // ✅ Protected navigation for Trade Now
+  const handleTradeNow = async (stockName: string) => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    // Not logged in → go to signup
+    router.push("/signup");
+    return;
+  }
+
+  try {
+    // Verify token with backend
+    const res = await fetch("http://localhost:5000/api/auth/verify", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      // Invalid/expired token → clear and redirect
+      localStorage.removeItem("token");
+      router.push("/signup");
+      return;
+    }
+
+    // ✅ Valid token → allow navigation
+    router.push(`/trade/${encodeURIComponent(stockName)}`);
+  } catch (error) {
+    console.error("Auth check failed:", error);
+    localStorage.removeItem("token");
+    router.push("/signup");
+  }
+};
+
   return (
     <div className="p-8 bg-gradient-to-br from-gray-900 via-gray-800 to-black min-h-screen">
       {/* Heading */}
@@ -133,9 +170,7 @@ export default function UnlistedSharesTable() {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      onClick={() =>
-                        router.push(`/trade/${encodeURIComponent(stock.name)}`)
-                      }
+                      onClick={() => handleTradeNow(stock.name)}
                       className="px-5 py-2 rounded-xl font-semibold bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md hover:shadow-xl hover:scale-105 transform transition-all duration-300"
                     >
                       Trade Now →

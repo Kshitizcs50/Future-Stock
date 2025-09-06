@@ -4,8 +4,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import { Search, Phone, Menu, X } from "lucide-react";
+import { motion } from "framer-motion";
+import { Search, Phone, Menu } from "lucide-react";
 
 const STOCKS = [
   { name: "NSE", domain: "nseindia.com" },
@@ -21,21 +21,43 @@ const STOCKS = [
 ];
 
 export default function Header() {
+ 
   const router = useRouter();
+  
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<typeof STOCKS>([]);
   const [loading, setLoading] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number>(-1);
-  const inputRef = useRef<HTMLInputElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // Fake auth state (replace later with real auth)
-  const [user, setUser] = useState<{ name: string } | null>(null);
+  // Auth state
+  const [user, setUser] = useState<{ name: string; email: string } | null>(
+    null
+  );
 
-  // Debounce & compute suggestions
+  // On mount, check token
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userData = localStorage.getItem("user");
+    if (token && userData) {
+      try {
+        setUser(JSON.parse(userData));
+      } catch {
+        setUser(null);
+      }
+    }
+  }, []);
+
+  function handleLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    router.push("/"); // redirect to home
+  }
+
+  // Search logic (unchanged)
   useEffect(() => {
     if (!query.trim()) {
       setSuggestions([]);
@@ -59,82 +81,11 @@ export default function Header() {
     return () => clearTimeout(id);
   }, [query]);
 
-  // close suggestions if click outside
-  useEffect(() => {
-    function onDoc(e: MouseEvent) {
-      if (!containerRef.current) return;
-      if (!containerRef.current.contains(e.target as Node)) {
-        setSearchOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", onDoc);
-    return () => document.removeEventListener("mousedown", onDoc);
-  }, []);
-
-  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (!suggestions.length) {
-      if (e.key === "Enter") submitSearch(query);
-      return;
-    }
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setActiveIndex((i) => Math.min(i + 1, suggestions.length - 1));
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setActiveIndex((i) => Math.max(i - 1, 0));
-    } else if (e.key === "Enter") {
-      e.preventDefault();
-      const selected = suggestions[activeIndex] ?? null;
-      if (selected) navigateToStock(selected.name);
-      else submitSearch(query);
-    } else if (e.key === "Escape") {
-      setSearchOpen(false);
-    }
-  }
-
-  function submitSearch(q: string) {
-    const trimmed = q.trim();
-    if (!trimmed) return;
-    router.push(`/search?q=${encodeURIComponent(trimmed)}`);
-    setSearchOpen(false);
-    setMobileSearchOpen(false);
-    setQuery("");
-  }
-
   function navigateToStock(name: string) {
     const slug = name.toLowerCase().replace(/\s+/g, "-");
     router.push(`/stock/${encodeURIComponent(slug)}`);
-    setSearchOpen(false);
-    setMobileSearchOpen(false);
     setQuery("");
     setSuggestions([]);
-  }
-
-  function getLogo(domain: string) {
-    return `https://logo.clearbit.com/${domain}?size=64`;
-  }
-
-  function highlight(name: string) {
-    if (!query) return <>{name}</>;
-    const q = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const re = new RegExp(`(${q})`, "ig");
-    const parts = name.split(re);
-    return (
-      <>
-        {parts.map((part, idx) =>
-          re.test(part) ? (
-            <mark
-              key={idx}
-              className="bg-amber-200/70 px-0.5 rounded"
-            >
-              {part}
-            </mark>
-          ) : (
-            <span key={idx}>{part}</span>
-          )
-        )}
-      </>
-    );
   }
 
   return (
@@ -183,47 +134,41 @@ export default function Header() {
 
             {/* Right Side */}
             <div className="flex items-center gap-3">
-              {/* Desktop Search */}
-              <div
-                ref={containerRef}
-                className="hidden md:flex items-center gap-2"
-              >
-                {/* ... existing expanding search ... */}
-              </div>
-
-              {/* Mobile Search */}
-              <button
-                className="md:hidden w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center"
-                onClick={() => setMobileSearchOpen(true)}
-                aria-label="Open search"
-              >
-                <Search size={18} />
-              </button>
-
               {/* Auth Buttons */}
-              {user ? (
-                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-sky-500 to-cyan-400 flex items-center justify-center text-white font-bold cursor-pointer shadow">
-                  {user.name.charAt(0).toUpperCase()}
+            {user ? (
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-sky-500 to-cyan-400 flex items-center justify-center text-white font-bold shadow">
+                  {( user.email)
+                    .charAt(0)
+                    .toUpperCase()}
                 </div>
-              ) : (
-                <>
-                  <Link href="/login">
-                    <motion.button
-                      whileHover={{ scale: 1.03 }}
-                      className="hidden md:flex items-center gap-2 border border-sky-500 text-sky-600 px-4 py-2 rounded-full shadow-sm"
-                    >
-                      Login
-                    </motion.button>
-                  </Link>
-                  <Link href="/signup">
-                    <motion.button
-                      whileHover={{ scale: 1.03 }}
-                      className="hidden md:flex items-center gap-2 bg-gradient-to-r from-sky-600 to-cyan-500 text-white px-4 py-2 rounded-full shadow"
-                    >
-                      Signup
-                    </motion.button>
-                  </Link>
-                </>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                
+                  className="hidden md:flex items-center gap-2 border border-red-500 text-red-600 px-4 py-2 rounded-full shadow-sm"
+                >
+                  Logout
+                </motion.button>
+              </div>
+            ) : (
+              <>
+                <Link href="/login">
+                  <motion.button
+                    whileHover={{ scale: 1.03 }}
+                    className="hidden md:flex items-center gap-2 border border-sky-500 text-sky-600 px-4 py-2 rounded-full shadow-sm"
+                  >
+                    Login
+                  </motion.button>
+                </Link>
+                <Link href="/signup">
+                  <motion.button
+                    whileHover={{ scale: 1.03 }}
+                    className="hidden md:flex items-center gap-2 bg-gradient-to-r from-sky-600 to-cyan-500 text-white px-4 py-2 rounded-full shadow"
+                  >
+                    Signup
+                  </motion.button>
+                </Link>
+              </>
               )}
 
               {/* Contact */}

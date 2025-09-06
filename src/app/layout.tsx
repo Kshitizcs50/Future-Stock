@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import StockTicker from "./components/Stocktop/StockTicker";
 
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -34,6 +35,7 @@ export default function RootLayout({
         <Header />
         <StockTicker/>
         {children}
+        
   
       <Footer/>
       </body>
