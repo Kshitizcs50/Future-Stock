@@ -24,7 +24,7 @@ export default function UnlistedShares() {
   useEffect(() => {
     async function fetchStocks() {
       try {
-        const res = await fetch("http://localhost:5000/api/stocks");
+        const res = await fetch("/api/stock");
         const data: Stock[] = await res.json();
         setStocks(data);
       } catch (error) {

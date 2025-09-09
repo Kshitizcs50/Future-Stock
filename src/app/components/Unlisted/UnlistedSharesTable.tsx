@@ -26,7 +26,7 @@ export default function UnlistedSharesTable() {
   useEffect(() => {
     async function fetchStocks() {
       try {
-        const res = await fetch("/api/stocks");
+        const res = await fetch("/api/stock");
         if (!res.ok) throw new Error("Failed to fetch stocks");
 
         const data: Stock[] = await res.json();
