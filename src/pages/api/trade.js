@@ -1,4 +1,4 @@
-import authMiddleware from "../backend/middleware/auth";
+import authMiddleware from "../../../backend/middleware/auth";
 
 // Helper to run Express-style middleware in Vercel serverless
 function runMiddleware(req, res, fn) {

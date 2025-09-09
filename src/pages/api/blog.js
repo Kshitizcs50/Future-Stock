@@ -1,5 +1,5 @@
-import connectDB from "../backend/utils/db";
-import Blog from "../backend/models/Blog";
+import connectDB from "../../../backend/utils/db";
+import Blog from "../../../backend/models/Blog";
 
 export default async function handler(req, res) {
   await connectDB();
